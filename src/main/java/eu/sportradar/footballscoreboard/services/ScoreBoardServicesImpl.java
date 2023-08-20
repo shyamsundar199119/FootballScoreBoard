@@ -11,11 +11,10 @@ import java.util.stream.Collectors;
 
 public class ScoreBoardServicesImpl implements ScoreBoardServices {
 
-    public ScoreBoard currentGameScoreBoard;
     public List<ScoreBoard> scoreBoardList = new ArrayList<ScoreBoard>();
 
     public boolean startGame(String homeTeamName, String awayTeamName) {
-
+        ScoreBoard currentGameScoreBoard;
         if (homeTeamName == null || "".equals(homeTeamName) || awayTeamName == null || "".equals(awayTeamName)) {
             System.out.println("Invalid Team names");
             return false;
@@ -23,28 +22,29 @@ public class ScoreBoardServicesImpl implements ScoreBoardServices {
 
         currentGameScoreBoard = new ScoreBoard(homeTeamName, awayTeamName);
         currentGameScoreBoard.setMatchStartTime(Instant.now());
+        scoreBoardList.add(currentGameScoreBoard);
         return true;
     }
 
-    public boolean finishGame() {
+    public boolean finishGame(String homeTeamName, String awayTeamName) {
+        ScoreBoard currentGameScoreBoard=getScore(homeTeamName,awayTeamName);
         if (currentGameScoreBoard == null) {
-            System.out.println("No Game in progress");
+            System.out.println("No Game found with given details");
             return false;
         }
-        currentGameScoreBoard.setTotalGoalsScored(currentGameScoreBoard.getHomeTeamScore() + currentGameScoreBoard.getAwayTeamScore());
-        currentGameScoreBoard.setGameCompleted(true);
-        scoreBoardList.add(currentGameScoreBoard);
-        currentGameScoreBoard=null;
+        scoreBoardList.remove(currentGameScoreBoard);
         return true;
     }
 
-    public boolean updateGame(int homeTeamScore, int awayTeamScore) {
+    public boolean updateGame(String homeTeamName, int homeTeamScore, String awayTeamName, int awayTeamScore) {
+        ScoreBoard currentGameScoreBoard=getScore(homeTeamName,awayTeamName);
         if (currentGameScoreBoard == null) {
-            System.out.println("No Game in progress");
+            System.out.println("No Game found with given details");
             return false;
         }
         currentGameScoreBoard.setHomeTeamScore(homeTeamScore);
         currentGameScoreBoard.setAwayTeamScore(awayTeamScore);
+        currentGameScoreBoard.setTotalGoalsScored(homeTeamScore + awayTeamScore);
         return true;
     }
 
@@ -54,5 +54,12 @@ public class ScoreBoardServicesImpl implements ScoreBoardServices {
         List<ScoreBoard> list = scoreBoardList.stream().sorted(comparator).collect(Collectors.toList());
         Collections.reverse(list);
         return list;
+    }
+
+    private ScoreBoard getScore(String homeTeamName, String awayTeamName){
+        ScoreBoard scoreBoard=scoreBoardList.stream().filter(sb -> homeTeamName.equals(sb.getHomeTeamName()) && awayTeamName.equals(sb.getAwayTeamName()) )
+                .findAny()
+                .orElse(null);
+        return scoreBoard;
     }
 }

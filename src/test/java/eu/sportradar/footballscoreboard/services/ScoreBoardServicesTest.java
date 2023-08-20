@@ -23,17 +23,17 @@ public class ScoreBoardServicesTest {
 
     @Test
     public void finishGame() {
-        assertFalse(scoreBoardServices.finishGame());
+        assertFalse(scoreBoardServices.finishGame("Germany","Spain"));
         scoreBoardServices.startGame("Germany","Spain");
-        assertTrue(scoreBoardServices.finishGame());
-        assertFalse(scoreBoardServices.finishGame());
+        assertTrue(scoreBoardServices.finishGame("Germany","Spain"));
+        assertFalse(scoreBoardServices.finishGame("Germany","Spain"));
     }
 
     @Test
     public void updateGame() {
-        assertFalse(scoreBoardServices.updateGame(1,0));
+        assertFalse(scoreBoardServices.updateGame("Germany",1,"Spain",0));
         scoreBoardServices.startGame("Germany","Spain");
-        assertTrue(scoreBoardServices.updateGame(1,0));
+        assertTrue(scoreBoardServices.updateGame("Germany",1,"Spain",0));
     }
 
     @Test
@@ -69,24 +69,19 @@ public class ScoreBoardServicesTest {
 
 
         scoreBoardServices.startGame("Mexico","Canada");
-        scoreBoardServices.updateGame(0,5);
-        scoreBoardServices.finishGame();
+        scoreBoardServices.updateGame("Mexico",0,"Canada",5);
 
         scoreBoardServices.startGame("Spain","Brazil");
-        scoreBoardServices.updateGame(10,2);
-        scoreBoardServices.finishGame();
+        scoreBoardServices.updateGame("Spain",10,"Brazil",2);
 
         scoreBoardServices.startGame("Germany","France");
-        scoreBoardServices.updateGame(2,2);
-        scoreBoardServices.finishGame();
+        scoreBoardServices.updateGame("Germany",2,"France",2);
 
         scoreBoardServices.startGame("Uruguay","Italy");
-        scoreBoardServices.updateGame(6,6);
-        scoreBoardServices.finishGame();
+        scoreBoardServices.updateGame("Uruguay",6, "Italy",6);
 
         scoreBoardServices.startGame("Argentina","Australia");
-        scoreBoardServices.updateGame(3,1);
-        scoreBoardServices.finishGame();
+        scoreBoardServices.updateGame("Argentina",3,"Australia",1);
 
         scoreBoardList.stream().forEach(System.out::println);
         System.out.println("--------------");
