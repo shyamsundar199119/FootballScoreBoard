@@ -12,7 +12,7 @@ import java.util.List;
 public class ScoreBoardServicesTest {
 
     @InjectMocks
-    ScoreBoardServices scoreBoardServices;
+    ScoreBoardServices scoreBoardServices= new ScoreBoardServicesImpl();
 
     @Test
     public void startGame() {
